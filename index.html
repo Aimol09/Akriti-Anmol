@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Queen... 👑</title>
+    <title>I Love You Akriti... ❤️</title>
     <style>
         :root {
             --primary: #ff4757;
             --gradient: linear-gradient(45deg, #ff4757, #ff6b81);
-            --bg-gradient: linear-gradient(135deg, #ffeef2 0%, #ffd3dc 50%, #fbc2eb 100%);
         }
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg-gradient);
             color: #2d3436;
             margin: 0;
             padding: 0;
@@ -25,44 +23,91 @@
             overflow: hidden;
         }
 
-        /* High-end Frosted Glass Container */
+        /* Fullscreen Slideshow Background */
+        .bg-slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            object-fit: cover;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        /* Overlay to make text readable */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 238, 242, 0.45); 
+            backdrop-filter: blur(5px);
+            z-index: 2;
+        }
+
+        /* Frosted Glass Container */
         .glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            padding: 35px 25px;
             border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(214, 48, 49, 0.15),
-                        0 0 40px rgba(255, 182, 193, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15),
+                        0 0 40px rgba(255, 182, 193, 0.4);
             max-width: 420px;
             width: 85%;
             text-align: center;
             z-index: 10;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
         }
 
-        /* Smooth Fade In out effect */
         .fade-layer {
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        h2 {
-            color: #d63031;
+        /* Circular Frame for Center Photo */
+        .couple-pic-container {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 15px auto;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.25);
+            overflow: hidden;
+            background: #ffeef2;
+        }
+
+        .couple-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Animated "I Love You Akriti" Header */
+        .love-header {
             font-size: 28px;
-            font-weight: 800;
-            margin-top: 0;
-            margin-bottom: 10px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff4757, #ff6b81, #d63031);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
             letter-spacing: -0.5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
         }
 
         .subtitle {
             font-size: 15px;
-            color: #636e72;
+            color: #4a4a4a;
             font-weight: 500;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             line-height: 1.5;
         }
 
@@ -80,7 +125,6 @@
             gap: 14px;
         }
 
-        /* Luxury Neumorphic Buttons */
         .luxury-btn {
             padding: 16px 20px;
             font-size: 16px;
@@ -92,7 +136,6 @@
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             color: #2d3436;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-            text-align: center;
         }
 
         .luxury-btn:hover {
@@ -122,25 +165,20 @@
             box-shadow: 0 12px 30px rgba(255, 71, 87, 0.5);
         }
 
-        /* Floating Hearts Styling */
         .heart-fall {
             position: absolute;
             font-size: 26px;
             animation: fall linear infinite;
             top: -40px;
-            z-index: 1;
+            z-index: 15;
             user-select: none;
-            filter: drop-shadow(0px 5px 8px rgba(255, 71, 87, 0.2));
             opacity: 0.8;
         }
 
         @keyframes fall {
-            to {
-                transform: translateY(105vh) translateX(50px) rotate(360deg);
-            }
+            to { transform: translateY(105vh) translateX(50px) rotate(360deg); }
         }
 
-        /* Luxury Reward Coupon Design */
         .premium-voucher {
             background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
             color: white;
@@ -148,43 +186,35 @@
             border-radius: 24px;
             font-weight: 800;
             font-size: 18px;
-            letter-spacing: 0.5px;
             box-shadow: 0 15px 35px rgba(255, 71, 87, 0.4);
             display: inline-block;
             width: 85%;
             margin-top: 20px;
             border: 2px dashed rgba(255, 255, 255, 0.4);
-            position: relative;
         }
 
-        .premium-voucher::before, .premium-voucher::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-        }
-        .premium-voucher::before { left: -10px; transform: translateY(-50%); }
-        .premium-voucher::after { right: -10px; transform: translateY(-50%); }
-
-        #yt-player {
-            position: absolute;
-            width: 1px; height: 1px; opacity: 0;
-        }
+        #yt-player { position: absolute; width: 1px; height: 1px; opacity: 0; }
     </style>
 </head>
 <body>
+
+<!-- Background Images Grid -->
+<img src="" class="bg-slideshow" id="bg-image-1" style="opacity: 1;">
+<img src="" class="bg-slideshow" id="bg-image-2" style="opacity: 0;">
+<div class="bg-overlay"></div>
 
 <div id="yt-player"></div>
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <div class="glass-card" id="main-card">
     <div class="fade-layer" id="content-layer">
+        
         <!-- Screen 1: Welcome -->
         <div id="welcome-screen">
-            <h2>The Akriti Quiz 👑</h2>
+            <div class="couple-pic-container">
+                <img src="" alt="Our Memory" class="couple-pic" id="center-frame-pic">
+            </div>
+            <div class="love-header">I Love You Akriti ❤️</div>
             <div class="subtitle">Chalo dekhte hain tum mujhe kitna samajhti ho! Saare sahi jawaab dene par ek special premium reward unlock hoga. 😉</div>
             <button class="start-action-btn" onclick="startQuiz()">Let's Play! 🚀</button>
         </div>
@@ -199,8 +229,10 @@
         <!-- Screen 3: Reward -->
         <div id="final-reward" style="display: none;">
             <h2 style="font-size: 32px;">Perfect Score! 🎉❤️</h2>
-            <div class="subtitle" style="font-size: 16px; color: #2d3436; font-weight: 600; text-align: left; margin-top: 15px;">
-                I knew it! Tum mujhe mujhse bhi behtar jaanti ho. \n\nTumhaari isi pyaari si samajh ne mera dil jeet liya hai bacha. Ab jaldi se iska coupon claim kar lo!
+            <div class="subtitle" style="font-size: 16px; color: #2d3436; font-weight: 600; text-align: left; margin-top: 15px; white-space: pre-line;">
+                I knew it! Tum mujhe mujhse bhi behtar jaanti ho. 
+
+                Tumhaari isi pyaari si samajh ne mera dil jeet liya hai bacha. Ab jaldi se iska coupon claim kar lo!
             </div>
             <div class="premium-voucher">
                 🎫 1 FREE TIGHT HUG VOUCHER
@@ -211,6 +243,40 @@
 </div>
 
 <script>
+// Yahan tumhare exact screenshots ke naam set kar diye hain (.png format ke saath)
+const photos = [
+    "Screenshot (1).png", "Screenshot (2).png", "Screenshot (3).png", "Screenshot (4).png", "Screenshot (5).png",
+    "Screenshot (6).png", "Screenshot (7).png", "Screenshot (8).png", "Screenshot (9).png", "Screenshot (10).png",
+    "Screenshot (11).png", "Screenshot (12).png", "Screenshot (13).png", "Screenshot (14).png", "Screenshot (15).png"
+];
+
+let currentPhotoIndex = 0;
+const bgImage1 = document.getElementById('bg-image-1');
+const bgImage2 = document.getElementById('bg-image-2');
+const centerFramePic = document.getElementById('center-frame-pic');
+let isBg1Active = true;
+
+// Initial Images Load
+bgImage1.src = photos[0];
+centerFramePic.src = photos[0];
+
+// Dynamic Slideshow Timer (Har 4 second mein photo badlegi)
+setInterval(() => {
+    currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+    const nextSrc = photos[currentPhotoIndex];
+    
+    if (isBg1Active) {
+        bgImage2.src = nextSrc;
+        bgImage1.style.opacity = "0";
+        bgImage2.style.opacity = "1";
+    } else {
+        bgImage1.src = nextSrc;
+        bgImage2.style.opacity = "0";
+        bgImage1.style.opacity = "1";
+    }
+    isBg1Active = !isBg1Active;
+}, 4000);
+
 const quizData = [
     {
         question: "Mera favourite kaam kya hai jab main free hota hu?",
@@ -219,7 +285,7 @@ const quizData = [
     },
     {
         question: "Hum dono agle mahine (Next Month) mil rahe hain na?",
-        options: ["Nahi yaarr, plan cancel", "Diret 2028 mein milenge", "Haan, 1000% pakka milenge! 🫂", "Soch kar batati hu"],
+        options: ["Nahi yaarr, plan cancel", "Direct 2028 mein milenge", "Haan, 1000% pakka milenge! 🫂", "Soch kar batati hu"],
         correct: 2
     },
     {
