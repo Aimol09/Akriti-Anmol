@@ -1,1 +1,221 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akriti's Special Quiz... 👑</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef2 0%, #ffd3dc 50%, #fbc2eb 100%); 
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 30px 20px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(214, 48, 49, 0.15);
+            max-width: 440px;
+            width: 88%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid #ffb3c1;
+            z-index: 10;
+        }
+
+        h2 {
+            color: #d63031;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #2d3436;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            background-color: white;
+            border: 2px solid #ffccd5;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #4a4a4a;
+        }
+
+        .option-btn:hover {
+            background-color: #ffeef2;
+            border-color: #ff4757;
+            transform: scale(1.02);
+        }
+
+        /* Result Area */
+        #final-reward {
+            display: none;
+        }
+
+        .reward-text {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.8;
+            white-space: pre-line;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .voucher {
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
+            display: inline-block;
+            width: 80%;
+            margin-top: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        /* Hidden YouTube Audio */
+        #yt-player {
+            position: absolute;
+            width: 1px; height: 1px; opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="yt-player"></div>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<div class="quiz-container" id="quiz-box">
+    <!-- Screen 1: Welcome -->
+    <div id="welcome-screen">
+        <h2>Akriti's Special Quiz 👑</h2>
+        <p style="font-weight: 600; font-size: 16px; margin-bottom: 25px;">Chalo dekhein tum mujhe kitna jaanti ho! Saare sahi jawaab dene par ek special reward khulega. 😉</p>
+        <button class="option-btn" style="background: #ff4757; color: white; border: none; width: 100%;" onclick="startQuiz()">Let's Play! 🚀</button>
+    </div>
+
+    <!-- Screen 2: Questions Area -->
+    <div id="question-screen" style="display: none;">
+        <h2 id="q-number">Question 1/3</h2>
+        <div class="question" id="q-text">Sawaal loading...</div>
+        <div class="options-grid" id="options-box">
+            <!-- Buttons dynamically aayenge -->
+        </div>
+    </div>
+
+    <!-- Screen 3: Final Reward -->
+    <div id="final-reward">
+        <h2>Mubarak Ho! You Won! 🎉❤️</h2>
+        <div class="reward-text">
+            Sahi jawaab! Tum mujhe mujhse bhi behtar jaanti ho. 
+
+            Tumhaari isi pyaari si samajh ne mera dil jeet liya hai. Tum mere liye kya ho, yeh main lafzon mein nahi bata sakta. Bas hamesha aise hi saath rehna! I love you!
+        </div>
+        <div class="voucher">🎫 1 FREE TIGHT HUG VOUCHER<br><span style="font-size: 12px; font-weight: normal;">(Redeemable on Next Month's Meeting!)</span></div>
+    </div>
+</div>
+
+<script>
+// Sawaal aur Jawaab (Tum apne hisab se change kar sakte ho)
+const quizData = [
+    {
+        question: "Mera favourite kaam kya hai jab main free hota hu?",
+        options: ["Doston se baat karna", "Tumhe tang karna aur yaad karna", "Sona", "Instagram scroll karna"],
+        correct: 1 // 0 se shuru hota hai (1 yani dusra option sahi hai)
+    },
+    {
+        question: "Hum dono agle mahine (Next Month) mil rahe hain na?",
+        options: ["Nahi, mood nahi hai", "2028 mein milenge", "Haan, 1000% pakka milenge! 🫂", "Soch kar bataungi"],
+        correct: 2
+    },
+    {
+        question: "Duniya mein sabse pyaari smile kiski hai?",
+        options: ["Kisi heroine ki", "Meri khud ki", "Akriti Sharma ki 😍", "Pata nahi re"],
+        correct: 2
+    }
+];
+
+let currentQuestion = 0;
+let player;
+
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('yt-player', {
+        height: '1', width: '1',
+        videoId: 'tDBUEpcQ4hY', // Tumhara wahi romantic short song
+        playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'tDBUEpcQ4hY' }
+    });
+}
+
+function startQuiz() {
+    if (player && player.playVideo) player.playVideo(); // Gaana piche chalega
+    document.getElementById("welcome-screen").style.display = "none";
+    document.getElementById("question-screen").style.display = "block";
+    loadQuestion();
+}
+
+function loadQuestion() {
+    const currentData = quizData[currentQuestion];
+    document.getElementById("q-number").innerText = `Question ${currentQuestion + 1}/${quizData.length}`;
+    document.getElementById("q-text").innerText = currentData.question;
+    
+    const optionsBox = document.getElementById("options-box");
+    optionsBox.innerHTML = ""; // Purane clear karo
+
+    currentData.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.classList.add("option-btn");
+        button.innerText = option;
+        button.onclick = () => checkAnswer(index);
+        optionsBox.appendChild(button);
+    });
+}
+
+function checkAnswer(selectedIndex) {
+    const correctIndex = quizData[currentQuestion].correct;
+    
+    if (selectedIndex === correctIndex) {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+            loadQuestion();
+        } else {
+            // Quiz over, show reward
+            document.getElementById("question-screen").style.display = "none";
+            document.getElementById("final-reward").style.display = "block";
+        }
+    } else {
+        alert("Galat jawaab! 😜 Mujhe pata tha tum galti karogi, chalo firse try karo!");
+    }
+}
+</script>
+
+</body>
+</html>
